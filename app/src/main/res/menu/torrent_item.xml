@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/itemRecheck"
+        android:icon="@android:drawable/presence_online"
+        android:title="Recheck" />
+
+    <item android:id="@+id/itemRemove"
+        android:icon="@android:drawable/ic_delete"
+        android:title="Remove" />
+
+</menu>
