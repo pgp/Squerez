@@ -7,7 +7,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 28
         multiDexEnabled true
-        versionCode 100190320
+        versionCode 100190512
         versionName "1.0.0_alpha"
     }
     buildTypes {

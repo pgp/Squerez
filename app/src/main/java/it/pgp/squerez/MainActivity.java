@@ -1,5 +1,6 @@
 package it.pgp.squerez;
 
+import java.net.URLDecoder;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -111,7 +112,7 @@ public class MainActivity extends Activity {
                         magnetLink.setText(magnetOrTorrentPath);
                         break;
                     case "file":
-                        magnetLink.setText(magnetOrTorrentPath.substring(7));
+                        magnetLink.setText(URLDecoder.decode(magnetOrTorrentPath,"UTF-8").substring(7));
                         break;
                     case "content":
                         String tmpfilepath = Misc.dumpContentUriIntoTmpFile(this,data,((StringQueueCommandReader)ConsoleInputHelperFactory.currentCommandReader).tmpDir);
