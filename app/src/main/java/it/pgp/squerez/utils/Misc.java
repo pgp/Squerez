@@ -37,4 +37,8 @@ public class Misc {
         }
         return f.getAbsolutePath();
     }
+
+    public static String simpleEscapeDoubleQuotes(String s) {
+        return "\"" +s.replace("\"","\\\"") + "\"";
+    }
 }

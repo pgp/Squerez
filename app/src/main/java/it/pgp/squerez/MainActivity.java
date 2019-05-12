@@ -112,7 +112,7 @@ public class MainActivity extends Activity {
                         magnetLink.setText(magnetOrTorrentPath);
                         break;
                     case "file":
-                        magnetLink.setText(URLDecoder.decode(magnetOrTorrentPath,"UTF-8").substring(7));
+                        magnetLink.setText(Misc.simpleEscapeDoubleQuotes(URLDecoder.decode(magnetOrTorrentPath,"UTF-8").substring(7)));
                         break;
                     case "content":
                         String tmpfilepath = Misc.dumpContentUriIntoTmpFile(this,data,((StringQueueCommandReader)ConsoleInputHelperFactory.currentCommandReader).tmpDir);

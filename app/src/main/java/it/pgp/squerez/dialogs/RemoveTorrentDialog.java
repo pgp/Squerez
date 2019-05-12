@@ -6,13 +6,13 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.apache.commons.io.FileUtils;
 import org.gudy.azureus2.ui.console.ConsoleInputHelperFactory;
 
-import java.io.File;
+import java.util.Collections;
 
 import it.pgp.squerez.R;
 import it.pgp.squerez.utils.StringQueueCommandReader;
+import it.pgp.squerez.utils.XFilesUtilsLite;
 
 public class RemoveTorrentDialog extends Dialog {
 
@@ -28,9 +28,9 @@ public class RemoveTorrentDialog extends Dialog {
         findViewById(R.id.removeTorrentYesButton).setOnClickListener(v->{
             ConsoleInputHelperFactory.currentCommandReader.writeLine("r "+torrentIndex+"\n");
             if(removeOrigin.isChecked())
-                FileUtils.deleteQuietly(new File(originPath));
+                XFilesUtilsLite.deleteFilesOrDirectories(Collections.singletonList(originPath));
             if(removeDownloadedFiles.isChecked())
-                FileUtils.deleteQuietly(new File(downloadedFilesPath));
+                XFilesUtilsLite.deleteFilesOrDirectories(Collections.singletonList(downloadedFilesPath));
             Toast.makeText(context, "Torrent removed", Toast.LENGTH_SHORT).show();
             dismiss();
         });

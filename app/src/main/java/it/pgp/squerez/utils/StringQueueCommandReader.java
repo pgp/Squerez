@@ -3,7 +3,6 @@ package it.pgp.squerez.utils;
 import android.os.Environment;
 import android.util.Log;
 
-import org.apache.commons.io.FileUtils;
 import org.gudy.azureus2.ui.console.CommandReader;
 
 import java.io.File;
@@ -41,11 +40,7 @@ public class StringQueueCommandReader extends CommandReader {
     }
 
     public void removeAllDownloadedFiles() {
-        try {
-            FileUtils.cleanDirectory(downloadsDir);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        XFilesUtilsLite.cleanDirectory(downloadsDir);
     }
 
     @Override
@@ -56,7 +51,7 @@ public class StringQueueCommandReader extends CommandReader {
         new Thread(()->{
             try {
                 Thread.sleep(1000);
-                FileUtils.cleanDirectory(torrentsDir);
+                XFilesUtilsLite.cleanDirectory(torrentsDir);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -65,13 +60,13 @@ public class StringQueueCommandReader extends CommandReader {
 
     public void cleanTmpDir() {
         try {
-            FileUtils.cleanDirectory(tmpDir);
+            XFilesUtilsLite.cleanDirectory(tmpDir);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void readdTmpTorrentFilesForRecheck() {
+    public void readTmpTorrentFilesForRecheck() {
         // re-add, will automatically recheck against already existing files
         MainActivity.active.set(false); // FIXME sloppy, non-thread safe for System.in access, should at least use synchronized here and in TorrentMonitor
         for(File tmpTorrentFile: tmpDir.listFiles())
@@ -101,7 +96,7 @@ public class StringQueueCommandReader extends CommandReader {
                 torrentFile.renameTo(new File(tmpDir,cnt+".torrent"));
                 cnt++;
             }
-            readdTmpTorrentFilesForRecheck();
+            readTmpTorrentFilesForRecheck();
         }
         else {
             // remove individual files
@@ -118,7 +113,7 @@ public class StringQueueCommandReader extends CommandReader {
                     throw new RuntimeException("Unable to perform rename of temporary torrent file");
                 cnt++;
             }
-            readdTmpTorrentFilesForRecheck();
+            readTmpTorrentFilesForRecheck();
         }
     }
 
