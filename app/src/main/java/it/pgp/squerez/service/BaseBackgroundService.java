@@ -1,6 +1,5 @@
 package it.pgp.squerez.service;
 
-import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -52,8 +51,8 @@ public abstract class BaseBackgroundService extends Service {
     private void abortServiceWithoutConfirmation() {
         stopForeground(true);
         stopSelf();
-        try { MainActivity.mainActivity.finishAffinity(); }
-        catch (NullPointerException ignored) {}
+        try { MainActivity.mainActivity.finishAffinity(); } catch (NullPointerException ignored) {}
+        try { TorrentMonitor.instance.interrupt(); } catch (NullPointerException ignored) {}
     }
 	
 	protected abstract void prepareLabels();
