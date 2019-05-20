@@ -27,6 +27,9 @@ public class TorrentStatus implements Serializable, Checkable, Comparable<Torren
     public int totalPeers;
     public int activePeers;
 
+    public int maxUpBps;
+    public int maxDownBps;
+
 
     private boolean checked = false;
 
@@ -44,6 +47,8 @@ public class TorrentStatus implements Serializable, Checkable, Comparable<Torren
                          int activeSeeds,
                          int totalPeers,
                          int activePeers,
+                         int maxUpBps,
+                         int maxDownBps,
                          TorrentState torrentState) {
         this.index = index; // changes only upon other items removal
         this.origin = origin; // FIXED
@@ -57,6 +62,8 @@ public class TorrentStatus implements Serializable, Checkable, Comparable<Torren
         this.activeSeeds = activeSeeds;
         this.totalPeers = totalPeers;
         this.activePeers = activePeers;
+        this.maxUpBps = maxUpBps;
+        this.maxDownBps = maxDownBps;
         this.torrentState = torrentState;
     }
 

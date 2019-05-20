@@ -28,6 +28,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import it.pgp.squerez.dialogs.AboutDialog;
 import it.pgp.squerez.dialogs.RemoveTorrentDialog;
+import it.pgp.squerez.dialogs.ThrottleTorrentDialog;
 import it.pgp.squerez.enums.Permissions;
 import it.pgp.squerez.responses.TorrentStatus;
 import it.pgp.squerez.service.BaseBackgroundService;
@@ -143,7 +144,10 @@ public class MainActivity extends Activity {
                 break;
             case R.id.itemRemove:
                 TorrentStatus ts = torrentAdapter.getItem(pos);
-                new RemoveTorrentDialog(this,pos+1,ts.origin,ts.path).show();
+                new RemoveTorrentDialog(this,ts.index,ts.origin,ts.path).show();
+                break;
+            case R.id.itemThrottleSpeeds:
+                new ThrottleTorrentDialog(this, torrentAdapter.getItem(pos)).show();
                 break;
         }
         return true;

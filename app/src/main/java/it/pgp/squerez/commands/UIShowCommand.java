@@ -241,6 +241,8 @@ public class UIShowCommand extends IConsoleCommand {
 
                     shown_torrents.add( dm );
 
+                    DownloadManagerStats dmStats = dm.getStats();
+
                     try {
                         PEPeerManager pm = dm.getPeerManager();
                         ps = pm==null?null:pm.getStats();
@@ -248,8 +250,8 @@ public class UIShowCommand extends IConsoleCommand {
                         ps = null;
                     }
                     if (ps != null) {
-                        totalReceived += dm.getStats().getTotalDataBytesReceived();
-                        totalSent += dm.getStats().getTotalDataBytesSent();
+                        totalReceived += dmStats.getTotalDataBytesReceived();
+                        totalSent += dmStats.getTotalDataBytesSent();
                         totalDiscarded += ps.getTotalDiscarded();
                         connectedSeeds += dm.getNbSeeds();
                         connectedPeers += dm.getNbPeers();
@@ -258,11 +260,11 @@ public class UIShowCommand extends IConsoleCommand {
                     ci.out.println(getTorrentSummary(dm));
                     ci.out.println();
 
-                    long completedBytes = dm.getStats().getDownloadCompletedBytes();
-                    float completePercentage = dm.getStats().getDownloadCompleted(true)/10.0f;
+                    long completedBytes = dmStats.getDownloadCompletedBytes();
+                    float completePercentage = dmStats.getDownloadCompleted(true)/10.0f;
                     long totalSizeApprox = (long)(completedBytes*100f/(completePercentage+0.00000001));
 
-                    // FIXME BEGIN UI DATA FOR ADAPTER
+                    // BEGIN UI DATA FOR ADAPTER
                     TorrentStatus ts = new TorrentStatus(
                             currentIdx++,
                             dm.getTorrentFileName(),
@@ -270,20 +272,22 @@ public class UIShowCommand extends IConsoleCommand {
                             completedBytes/1000000,
                             totalSizeApprox/1000000, // TODO retrieve total size directly, then adjust to MBs
                             completePercentage, // percentage in thousandths
-                            dm.getStats().getDataReceiveRate(),
-                            dm.getStats().getDataSendRate(),
+                            dmStats.getDataReceiveRate(),
+                            dmStats.getDataSendRate(),
                             -1,
                             dm.getNbSeeds(),
                             -1,
                             dm.getNbPeers(),
+                            dmStats.getUploadRateLimitBytesPerSecond(),
+                            dmStats.getDownloadRateLimitBytesPerSecond(),
                             TorrentState.fromVuzeState(dm.getState())
                     );
                     torrentStatuses.add(ts);
-                    // FIXME END UI DATA FOR ADAPTER
+                    // END UI DATA FOR ADAPTER
                 }
             }
 
-            // FIXME update array adapter with TorrentStatus object just created
+            // update array adapter with TorrentStatus object just created
             if(MainActivity.mainActivity != null) MainActivity.mainActivity.runOnUiThread(()-> MainActivity.torrentAdapter.setNewContent(torrentStatuses));
 
             ci.torrents.clear();
@@ -463,7 +467,7 @@ public class UIShowCommand extends IConsoleCommand {
             out.println("  Not available");
 
         out.println("- Files Info -");
-        DiskManagerFileInfo files[] = dm.getDiskManagerFileInfo();
+        DiskManagerFileInfo[] files = dm.getDiskManagerFileInfo();
         if (files != null) {
             for (int i = 0; i < files.length; i++) {
                 out.print(((i < 9) ? "   " : "  ") + Integer.toString(i + 1)

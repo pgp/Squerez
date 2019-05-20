@@ -9,4 +9,7 @@
         android:icon="@android:drawable/ic_delete"
         android:title="Remove" />
 
+    <item android:id="@+id/itemThrottleSpeeds"
+        android:title="Throttle U/D speeds" />
+
 </menu>
