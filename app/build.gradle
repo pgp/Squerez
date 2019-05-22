@@ -7,8 +7,8 @@ android {
         minSdkVersion 19
         targetSdkVersion 28
         multiDexEnabled true
-        versionCode 101190520
-        versionName "1.0.1_alpha"
+        versionCode 102190522
+        versionName "1.0.2_alpha"
     }
     buildTypes {
         release {
@@ -27,6 +27,6 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support:multidex:1.0.3'
     // implementation 'com.github.pgp:Abvuze:master-SNAPSHOT'
-    implementation 'com.github.pgp:Abvuze:55f7871'
+    implementation 'com.github.pgp:Abvuze:4def45b'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 }

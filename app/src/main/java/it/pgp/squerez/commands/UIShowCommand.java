@@ -27,6 +27,7 @@ import org.gudy.azureus2.core3.peer.PEPeerManagerStats;
 import org.gudy.azureus2.core3.peer.PEPeerStats;
 import org.gudy.azureus2.core3.peer.PEPiece;
 import org.gudy.azureus2.core3.tracker.client.TRTrackerAnnouncer;
+import org.gudy.azureus2.core3.tracker.client.TRTrackerScraperResponse;
 import org.gudy.azureus2.core3.util.AEDiagnostics;
 import org.gudy.azureus2.core3.util.DisplayFormatters;
 import org.gudy.azureus2.core3.util.IndentWriter;
@@ -90,6 +91,14 @@ public class UIShowCommand extends IConsoleCommand {
         out.println("> -----");
     }
 
+    private static final int[] noTotalSwarmDataAvailable = {-1,-1};
+    private int[] getTotalSwarmData(DownloadManager dm) {
+        TRTrackerScraperResponse x = dm.getTrackerScrapeResponse();
+        if(x != null && x.isValid())
+            return new int[]{x.getSeeds(),x.getPeers()};
+        else return noTotalSwarmDataAvailable;
+    }
+
     public void execute(String commandName, ConsoleInput ci, List args) {
         if( args.isEmpty() )
         {
@@ -102,7 +111,6 @@ public class UIShowCommand extends IConsoleCommand {
         } else if(subCommand.equalsIgnoreCase("files") || subCommand.equalsIgnoreCase("f")) {
             ci.invokeCommand("add", Arrays.asList("--list"));
         } else if (subCommand.equalsIgnoreCase("torrents") || subCommand.equalsIgnoreCase("t")) {
-//            if(!MainActivity.active) return; // EDITED BY PGP avoid logcat output and adapter reload when activity is paused/destroyed
 
             ci.out.println("> -----");
             ci.torrents.clear();
@@ -262,7 +270,8 @@ public class UIShowCommand extends IConsoleCommand {
 
                     long completedBytes = dmStats.getDownloadCompletedBytes();
                     float completePercentage = dmStats.getDownloadCompleted(true)/10.0f;
-                    long totalSizeApprox = (long)(completedBytes*100f/(completePercentage+0.00000001));
+
+                    int[] totalSwarmData = getTotalSwarmData(dm);
 
                     // BEGIN UI DATA FOR ADAPTER
                     TorrentStatus ts = new TorrentStatus(
@@ -270,13 +279,13 @@ public class UIShowCommand extends IConsoleCommand {
                             dm.getTorrentFileName(),
                             dm.getAbsoluteSaveLocation().getAbsolutePath(),
                             completedBytes/1000000,
-                            totalSizeApprox/1000000, // TODO retrieve total size directly, then adjust to MBs
+                            dm.getSize()/1000000,
                             completePercentage, // percentage in thousandths
                             dmStats.getDataReceiveRate(),
                             dmStats.getDataSendRate(),
-                            -1,
+                            totalSwarmData[0],
                             dm.getNbSeeds(),
-                            -1,
+                            totalSwarmData[1],
                             dm.getNbPeers(),
                             dmStats.getUploadRateLimitBytesPerSecond(),
                             dmStats.getDownloadRateLimitBytesPerSecond(),
