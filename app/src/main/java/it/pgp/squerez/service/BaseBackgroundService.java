@@ -53,6 +53,7 @@ public abstract class BaseBackgroundService extends Service {
         stopSelf();
         try { MainActivity.mainActivity.finishAffinity(); } catch (NullPointerException ignored) {}
         try { TorrentMonitor.instance.interrupt(); } catch (NullPointerException ignored) {}
+        MainActivity.shuttingDown = true;
     }
 	
 	protected abstract void prepareLabels();

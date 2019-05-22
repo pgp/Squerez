@@ -4,4 +4,5 @@
     <string name="app_about_desc">Torrent manager for Android, based on Vuze</string>
     <string name="appWebsite">https://github.com/pgp/Squerez</string>
     <string name="removeAllTorrentsCaption">Remove all torrents?</string>
+    <string name="warn_dirty_restart">A previous instance of the application is still running, please wait for its shutdown to be completed, then open the app again</string>
 </resources>

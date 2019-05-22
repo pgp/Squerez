@@ -1,12 +1,13 @@
 package it.pgp.squerez;
 
+import java.io.File;
 import java.net.URLDecoder;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v4.app.ActivityCompat;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
@@ -38,6 +39,11 @@ import it.pgp.squerez.utils.StringQueueCommandReader;
 
 public class MainActivity extends Activity {
 
+    static {
+        // avoid messing up with content URIs
+        StrictMode.setVmPolicy(StrictMode.VmPolicy.LAX);
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -48,11 +54,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        addTorrentLayout.setVisibility(lastVisibilityStatusOfAddTorrentLayout); // restore survived status across onDestroy calls, if any
-        active.set(true);
-        synchronized(active) {
-            active.notifyAll();
-        }
+        resumeStd.run();
     }
 
     public static final AtomicBoolean active = new AtomicBoolean(false);
@@ -61,8 +63,18 @@ public class MainActivity extends Activity {
     EditText magnetLink;
     ImageButton startDownload;
     ListView torrentListView;
+
+    Runnable resumeStd = () -> {
+        addTorrentLayout.setVisibility(lastVisibilityStatusOfAddTorrentLayout); // restore survived status across onDestroy calls, if any
+        active.set(true);
+        synchronized(active) {
+            active.notifyAll();
+        }
+    };
+
     public static TorrentAdapter torrentAdapter;
     public static MainActivity mainActivity;
+    public static boolean shuttingDown = false;
 
     public static int lastVisibilityStatusOfAddTorrentLayout = View.VISIBLE;
 
@@ -138,16 +150,25 @@ public class MainActivity extends Activity {
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         int pos = info.position;
+        TorrentStatus ts = torrentAdapter.getItem(pos);
         switch (item.getItemId()) {
             case R.id.itemRecheck:
                 ConsoleInputHelperFactory.currentCommandReader.recheckTorrents(pos+1);
                 break;
             case R.id.itemRemove:
-                TorrentStatus ts = torrentAdapter.getItem(pos);
                 new RemoveTorrentDialog(this,ts.index,ts.origin,ts.path).show();
                 break;
             case R.id.itemThrottleSpeeds:
-                new ThrottleTorrentDialog(this, torrentAdapter.getItem(pos)).show();
+                new ThrottleTorrentDialog(this, ts).show();
+                break;
+            case R.id.itemLocate:
+                File f = new File(ts.path);
+                if(!f.isDirectory()) f = f.getParentFile();
+                Uri uri = Uri.fromFile(f);
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                intent.setDataAndType(uri, "*/*");
+                startActivity(intent);
                 break;
         }
         return true;
@@ -163,6 +184,14 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        if(shuttingDown) {
+            // old process has not been shutdown yet
+            resumeStd = ()->{};
+            setContentView(R.layout.info);
+            return;
+        }
+
         mainActivity = this;
 
         if(!checkDangerousPermissions()) {
