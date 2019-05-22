@@ -18,6 +18,8 @@ import java.io.File;
 import java.net.InetAddress;
 import java.util.HashSet;
 
+import it.pgp.misc.ExitHandler;
+
 /**
  * @author PGP
  * @created Mar 5, 2019
@@ -50,6 +52,7 @@ public class PlatformManagerImpl implements PlatformManager
 
     static {
         initializeSingleton();
+        ExitHandler.defaultHandler = ExitHandler.stdHandler; // force VM close on Android in order to terminate daemon threads
     }
 
     /**
