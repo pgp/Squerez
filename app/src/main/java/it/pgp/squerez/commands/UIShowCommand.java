@@ -307,7 +307,7 @@ public class UIShowCommand extends IConsoleCommand {
             ci.out.println("Total Speed (down/up): " + DisplayFormatters.formatByteCountToKiBEtcPerSec(gm.getStats().getDataReceiveRate() + gm.getStats().getProtocolReceiveRate() ) + " / " + DisplayFormatters.formatByteCountToKiBEtcPerSec(gm.getStats().getDataSendRate() + gm.getStats().getProtocolSendRate() ));
 
             ci.out.println("Transferred Volume (down/up/discarded): " + DisplayFormatters.formatByteCountToKiBEtc(totalReceived) + " / " + DisplayFormatters.formatByteCountToKiBEtc(totalSent) + " / " + DisplayFormatters.formatByteCountToKiBEtc(totalDiscarded));
-            ci.out.println("Total Connected Peers (seeds/peers): " + Integer.toString(connectedSeeds) + " / " + Integer.toString(connectedPeers));
+            ci.out.println("Total Connected Peers (seeds/peers): " + connectedSeeds + " / " + connectedPeers);
             ci.out.println("> -----");
         } else if (subCommand.equalsIgnoreCase("dht") || subCommand.equalsIgnoreCase("d")) {
 
@@ -399,7 +399,6 @@ public class UIShowCommand extends IConsoleCommand {
             }
             catch (Exception e) {
                 ci.out.println("> Command 'show': Subcommand '" + subCommand + "' unknown.");
-                return;
             }
         }
     }
@@ -425,7 +424,7 @@ public class UIShowCommand extends IConsoleCommand {
         } catch (Exception e) {
             out.println("Health: " + health[0]);
         }
-        out.println("State: " + Integer.toString(dm.getState()));
+        out.println("State: " + dm.getState());
         if (dm.getState() == DownloadManager.STATE_ERROR)
             out.println("Error: " + dm.getErrorDetails());
         out.println("Hash: " + TorrentUtils.nicePrintTorrentHash(dm.getTorrent(), true));
@@ -479,7 +478,7 @@ public class UIShowCommand extends IConsoleCommand {
         DiskManagerFileInfo[] files = dm.getDiskManagerFileInfo();
         if (files != null) {
             for (int i = 0; i < files.length; i++) {
-                out.print(((i < 9) ? "   " : "  ") + Integer.toString(i + 1)
+                out.print(((i < 9) ? "   " : "  ") + (i + 1)
                         + " (");
                 String tmp = ">";
                 if (files[i].getPriority()>0)

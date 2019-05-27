@@ -6,7 +6,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.TextView;
 
 import it.pgp.squerez.R;

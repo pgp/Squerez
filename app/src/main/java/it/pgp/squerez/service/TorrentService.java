@@ -65,7 +65,7 @@ public class TorrentService extends BaseBackgroundService {
                         android.R.drawable.ic_dialog_info), // TODO replace icons
                 128, 128, false);
 
-        return new NotificationCompat.Builder(this)
+        return new NotificationCompat.Builder(this,getPackageName())
                 .setContentTitle("Squerez")
                 .setTicker(foreground_ticker)
                 .setContentText(foreground_content_text)
@@ -73,7 +73,6 @@ public class TorrentService extends BaseBackgroundService {
                 .setLargeIcon(icon)
                 .setContentIntent(pendingIntent)
                 .setOngoing(true)
-                .setChannelId(getPackageName())
                 .addAction(android.R.drawable.ic_media_pause, foreground_pause_action_label, // TODO replace icons
                         ppauseIntent)
                 .addAction(android.R.drawable.ic_dialog_alert, foreground_stop_action_label, // TODO replace icons
