@@ -109,7 +109,7 @@ public class UIShowCommand extends IConsoleCommand {
         if (subCommand.equalsIgnoreCase("options") || subCommand.equalsIgnoreCase("o")) {
             ci.invokeCommand("set", null);
         } else if(subCommand.equalsIgnoreCase("files") || subCommand.equalsIgnoreCase("f")) {
-            ci.invokeCommand("add", Arrays.asList("--list"));
+            ci.invokeCommand("add", Collections.singletonList("--list"));
         } else if (subCommand.equalsIgnoreCase("torrents") || subCommand.equalsIgnoreCase("t")) {
 
             ci.out.println("> -----");
@@ -174,24 +174,14 @@ public class UIShowCommand extends IConsoleCommand {
 
             }
 
-            Iterator torrent;
-            if( args.size() > 0 )
-            {
-                List matchedTorrents = new TorrentFilter().getTorrents(ci.torrents, args);
-                torrent = matchedTorrents.iterator();
-            }
-            else
-                torrent = ci.torrents.iterator();
+            List<DownloadManager> torrent = args.size() > 0 ? new TorrentFilter().getTorrents(ci.torrents, args) : ci.torrents;
 
             List shown_torrents = new ArrayList();
 
 
             List<TorrentStatus> torrentStatuses = new ArrayList<>();
             int currentIdx = 1;
-            while (torrent.hasNext()) {
-
-                DownloadManager dm = (DownloadManager) torrent.next();
-
+            for(DownloadManager dm : torrent) {
                 DownloadManagerStats stats = dm.getStats();
 
                 boolean bDownloadCompleted = stats.getDownloadCompleted(false) == 1000;
@@ -340,22 +330,15 @@ public class UIShowCommand extends IConsoleCommand {
                 AzureusCoreStats.setEnableAverages(((String)args.get(1)).equalsIgnoreCase( "on" ));
             }
 
-            java.util.Set	types = new HashSet();
+            java.util.Set types = new HashSet();
+            types.add(pattern);
 
-            types.add( pattern );
+            Map<Object,Object>	reply = AzureusCoreStats.getStats(types);
 
-            Map	reply = AzureusCoreStats.getStats( types );
+            List lines = new ArrayList();
 
-            Iterator	it = reply.entrySet().iterator();
-
-            List	lines = new ArrayList();
-
-            while( it.hasNext()){
-
-                Map.Entry	entry = (Map.Entry)it.next();
-
+            for( Map.Entry entry : reply.entrySet())
                 lines.add( entry.getKey() + " -> " + entry.getValue());
-            }
 
             Collections.sort( lines );
 
