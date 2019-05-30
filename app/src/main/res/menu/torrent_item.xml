@@ -9,6 +9,15 @@
         android:icon="@android:drawable/ic_delete"
         android:title="Remove" />
 
+    <item android:id="@+id/itemStart"
+        android:title="Start" />
+
+    <item android:id="@+id/itemStop"
+        android:title="Stop" />
+
+    <item android:id="@+id/itemMove"
+        android:title="Move" />
+
     <item android:id="@+id/itemThrottleSpeeds"
         android:title="Throttle U/D speeds" />
 

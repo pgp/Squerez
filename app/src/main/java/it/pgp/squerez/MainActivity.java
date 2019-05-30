@@ -28,6 +28,7 @@ import java.util.EnumSet;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import it.pgp.squerez.dialogs.AboutDialog;
+import it.pgp.squerez.dialogs.MoveTorrentDialog;
 import it.pgp.squerez.dialogs.RemoveTorrentDialog;
 import it.pgp.squerez.dialogs.ThrottleTorrentDialog;
 import it.pgp.squerez.enums.Permissions;
@@ -96,7 +97,7 @@ public class MainActivity extends Activity {
         finish();
     }
 
-    public void removeOrRecheckAll(View button) {
+    public void allTorrentsActions(View button) {
         switch(button.getId()) {
             case R.id.recheckAllTorrentsButton:
                 ConsoleInputHelperFactory.currentCommandReader.recheckTorrents();
@@ -104,6 +105,14 @@ public class MainActivity extends Activity {
                 break;
             case R.id.removeAllTorrentsButton:
                 new RemoveTorrentDialog(this).show();
+                break;
+            case R.id.startAllTorrentsButton:
+                ConsoleInputHelperFactory.currentCommandReader.writeLine("s all\n");
+                Toast.makeText(this, "All torrents started", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.stopAllTorrentsButton:
+                ConsoleInputHelperFactory.currentCommandReader.writeLine("h all\n");
+                Toast.makeText(this, "All torrents stopped", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 Toast.makeText(this, "Invalid button ID", Toast.LENGTH_SHORT).show();
@@ -151,12 +160,25 @@ public class MainActivity extends Activity {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         int pos = info.position;
         TorrentStatus ts = torrentAdapter.getItem(pos);
+        if(ts==null) {
+            Toast.makeText(this, "Torrent index no longer valid", Toast.LENGTH_SHORT).show();
+            return true;
+        }
         switch (item.getItemId()) {
             case R.id.itemRecheck:
                 ConsoleInputHelperFactory.currentCommandReader.recheckTorrents(pos+1);
                 break;
             case R.id.itemRemove:
                 new RemoveTorrentDialog(this,ts.index,ts.origin,ts.path).show();
+                break;
+            case R.id.itemStart:
+                ConsoleInputHelperFactory.currentCommandReader.writeLine("s "+ts.index+"\n");
+                break;
+            case R.id.itemStop:
+                ConsoleInputHelperFactory.currentCommandReader.writeLine("h "+ts.index+"\n");
+                break;
+            case R.id.itemMove:
+                new MoveTorrentDialog(this,ts.index).show();
                 break;
             case R.id.itemThrottleSpeeds:
                 new ThrottleTorrentDialog(this, ts).show();

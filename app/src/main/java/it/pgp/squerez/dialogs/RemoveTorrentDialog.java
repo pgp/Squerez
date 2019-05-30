@@ -2,6 +2,7 @@ package it.pgp.squerez.dialogs;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.view.Window;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +21,7 @@ public class RemoveTorrentDialog extends Dialog {
     // torrentIndex starts from 1
     public RemoveTorrentDialog(Context context, final int torrentIndex, final String originPath, final String downloadedFilesPath) {
         super(context);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.remove_dialog);
         
         final CheckBox removeOrigin = findViewById(R.id.removeOriginCheckbox);
@@ -41,6 +43,7 @@ public class RemoveTorrentDialog extends Dialog {
     // remove all torrents
     public RemoveTorrentDialog(Context context) {
         super(context);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.remove_dialog);
         ((TextView)findViewById(R.id.removeTorrentCaption)).setText(context.getString(R.string.removeAllTorrentsCaption));
         

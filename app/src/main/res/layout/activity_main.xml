@@ -55,35 +55,54 @@
                 android:layout_height="wrap_content">
                 <Button
                     android:id="@+id/removeAllTorrentsButton"
-                    android:onClick="removeOrRecheckAll"
+                    android:onClick="allTorrentsActions"
                     android:text="Remove all"
-                    android:textSize="14sp"
+                    android:textSize="12sp"
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="match_parent" />
                 <Button
                     android:id="@+id/recheckAllTorrentsButton"
-                    android:onClick="removeOrRecheckAll"
+                    android:onClick="allTorrentsActions"
                     android:enabled="true"
                     android:text="Recheck all"
-                    android:textSize="14sp"
+                    android:textSize="12sp"
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="match_parent" />
-
                 <Button
+                    android:id="@+id/startAllTorrentsButton"
+                    android:onClick="allTorrentsActions"
+                    android:enabled="true"
+                    android:text="Start all"
+                    android:textSize="12sp"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent" />
+                <Button
+                    android:id="@+id/stopAllTorrentsButton"
+                    android:onClick="allTorrentsActions"
+                    android:enabled="true"
+                    android:text="Stop all"
+                    android:textSize="12sp"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent" />
+                <ImageButton
                     android:id="@+id/shutdownButton"
                     android:onClick="shutdownTorrentService"
-                    android:text="Shutdown"
+                    android:src="@drawable/shutdown_icon"
+                    android:background="?android:selectableItemBackground"
                     android:textSize="14sp"
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="match_parent" />
 
-                <Button
+                <ImageButton
                     android:id="@+id/aboutButton"
                     android:onClick="about"
-                    android:text="About"
+                    android:src="@drawable/about_icon"
+                    android:background="?android:selectableItemBackground"
                     android:textSize="14sp"
                     android:layout_weight="1"
                     android:layout_width="0dp"

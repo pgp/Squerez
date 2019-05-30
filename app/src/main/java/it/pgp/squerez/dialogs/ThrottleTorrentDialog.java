@@ -3,6 +3,7 @@ package it.pgp.squerez.dialogs;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
+import android.view.Window;
 import android.widget.EditText;
 
 import org.gudy.azureus2.ui.console.ConsoleInputHelperFactory;
@@ -49,6 +50,7 @@ public class ThrottleTorrentDialog extends Dialog {
 
     public ThrottleTorrentDialog(Context context, TorrentStatus torrentStatus) {
         super(context);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.throttle_dialog);
         this.torrentStatus = torrentStatus;
         maxUploadSpeed = findViewById(R.id.maxUploadSpeed);
