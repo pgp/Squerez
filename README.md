@@ -1,5 +1,15 @@
 # Squerez
-A torrent download app for Android, based on Vuze
+A simple torrent download app for Android
 
-## Disclaimer
-This is only for personal experimentation, the app has all the basic features offered by the command-line version of [Vuze](https://www.vuze.com), via a library repack you can find [here](https://github.com/pgp/Abvuze), but the battery usage is very high. If you are looking for a decent Android torrent application for everyday use, please have a look [here](https://gitlab.com/proninyaroslav/libretorrent)
+The app's core is a library repack of the command-line version of [Vuze](https://www.vuze.com),
+which you can find [here](https://github.com/pgp/Abvuze).
+
+### Currently supported features
+
+- Add torrent files / magnet links, directly within the app or by third-party apps (e.g. web browsers, file explorers)
+- Start/stop downloads
+- Move (increase/decrease priority)
+- Throttle upload/download speeds
+- Recheck torrent against downloaded data
+- Remove (completed) downloads, optionally including downloaded data and cached torrent files
+- Locate downloaded items (open external file browser app)
