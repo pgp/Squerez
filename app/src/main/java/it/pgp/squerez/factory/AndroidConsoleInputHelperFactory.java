@@ -9,6 +9,7 @@ import java.io.Reader;
 import it.pgp.squerez.commands.UIShowCommand;
 import it.pgp.squerez.utils.StringQueueCommandReader;
 
+// used internally by Abvuze, through reflection
 public class AndroidConsoleInputHelperFactory extends ConsoleInputHelperFactory {
 
     @Override

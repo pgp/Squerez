@@ -6,7 +6,7 @@ which you can find [here](https://github.com/pgp/Abvuze).
 
 ### Currently supported features
 
-- Add torrent files / magnet links, directly within the app or by third-party apps (e.g. web browsers, file explorers)
+- Add torrent files / magnet links / [mgnet.me](http://mgnet.me) shortened URLs, directly within the app or by third-party apps (e.g. web browsers, file explorers)
 - Start/stop downloads
 - Move (increase/decrease priority)
 - Throttle upload/download speeds

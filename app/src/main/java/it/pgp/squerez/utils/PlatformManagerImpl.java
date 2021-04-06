@@ -26,8 +26,6 @@ import it.pgp.misc.ExitHandler;
  */
 public class PlatformManagerImpl implements PlatformManager
 {
-    private static final LogIDs LOGID = LogIDs.CORE;
-
     private static final String ERR_UNSUPPORTED = "Unsupported capability called on platform manager";
 
     protected static PlatformManagerImpl singleton;
@@ -63,7 +61,7 @@ public class PlatformManagerImpl implements PlatformManager
             class_mon.enter();
             singleton = new PlatformManagerImpl();
         } catch (Throwable e) {
-            Logger.log(new LogEvent(LOGID, "Failed to initialize platform manager"
+            Logger.log(new LogEvent(LogIDs.CORE, "Failed to initialize platform manager"
                     + " for Unix Compatable OS", e));
         } finally {
             class_mon.exit();

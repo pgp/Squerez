@@ -7,8 +7,8 @@ android {
         minSdkVersion 19
         targetSdkVersion 28
         multiDexEnabled true
-        versionCode 103190530
-        versionName "1.0.3_alpha"
+        versionCode 107210406
+        versionName "1.0.7_beta"
     }
     buildTypes {
         release {
@@ -26,6 +26,8 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support:multidex:1.0.3'
-    // implementation 'com.github.pgp:Abvuze:master-SNAPSHOT'
-    implementation 'com.github.pgp:Abvuze:8d5c96a'
+//     implementation 'com.github.pgp:Abvuze:master-SNAPSHOT'
+     implementation 'com.github.pgp:Abvuze:8d5c96a' // latest officially used
+    // implementation 'com.github.pgp:Abvuze:a79a01ed708dab8604d26a22374d22832b35f390' // github-style 7-chars commit hashes not always work with jitpack.io
+    implementation group: 'dnsjava', name: 'dnsjava', version: '2.1.8'
 }

@@ -2,6 +2,7 @@ package it.pgp.squerez;
 
 import java.io.File;
 import java.net.URLDecoder;
+import java.util.concurrent.locks.LockSupport;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -43,6 +44,8 @@ public class MainActivity extends Activity {
     static {
         // avoid messing up with content URIs
         StrictMode.setVmPolicy(StrictMode.VmPolicy.LAX);
+
+        StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.LAX);
     }
 
     @Override
@@ -226,13 +229,41 @@ public class MainActivity extends Activity {
         magnetLink = findViewById(R.id.magnetLinkEditText);
         startDownload = findViewById(R.id.startDownloadButton);
         startDownload.setOnClickListener(v->{
-            String ml = magnetLink.getText().toString();
+            String ml_ = magnetLink.getText().toString();
+            if(ml_.startsWith("mgnet.me") || ml_.startsWith("http://mgnet.me")) {
+                try {
+                    ml_ = Misc.getMagnetLinkFromMgnetMeUrl(ml_);
+                    Toast.makeText(this, "Retrieved from mgnet.me:\n"+ml_, Toast.LENGTH_LONG).show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(this, "Unable to retrieve magnet link from mgnet.me", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+            else if (!ml_.startsWith("magnet:") || !(new File(ml_).exists())) {
+                Toast.makeText(this, "The provided item is not a magnet link, a torrent file path or a mgnet.me shortened link", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            final String ml = ml_;
             if(ml.isEmpty()) Toast.makeText(MainActivity.this, "Magnet link field is empty", Toast.LENGTH_SHORT).show();
             else {
-                ConsoleInputHelperFactory.currentCommandReader.writeLine("a "+ml+"\n");
-                Toast.makeText(MainActivity.this, "Magnet link added", Toast.LENGTH_SHORT).show();
                 magnetLink.setText("");
                 toggleAddTorrentLayout(null);
+                Toast.makeText(this, "Adding magnet link...", Toast.LENGTH_SHORT).show();
+                new Thread(()->{
+                    for(int i=0;i<3;i++) {
+                        try {
+                            ConsoleInputHelperFactory.currentCommandReader.writeLine("a "+ml+"\n");
+                            runOnUiThread(()-> Toast.makeText(MainActivity.this, "Magnet link added", Toast.LENGTH_SHORT).show());
+                            return;
+                        }
+                        catch(Exception e) { // should be a NPE, if currentCommandReader is not ready yet
+                            e.printStackTrace();
+                            LockSupport.parkNanos(1000000000);
+                        }
+                    }
+                    runOnUiThread(()->Toast.makeText(MainActivity.this, "Unable to add magnet link, torrent engine not loaded?", Toast.LENGTH_SHORT).show());
+                }).start();
             }
         });
         torrentAdapter = new TorrentAdapter(this,new ArrayList<>());
@@ -277,4 +308,7 @@ public class MainActivity extends Activity {
     }
 
 
+    public void startDnsTestActivity(View view) {
+        startActivity(new Intent(MainActivity.this,DNSTestActivity.class));
+    }
 }

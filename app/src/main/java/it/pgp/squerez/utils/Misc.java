@@ -9,6 +9,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.List;
+import java.util.Map;
 
 public class Misc {
 
@@ -40,5 +45,15 @@ public class Misc {
 
     public static String simpleEscapeDoubleQuotes(String s) {
         return "\"" +s.replace("\"","\\\"") + "\"";
+    }
+
+    // retrieve a magnet link from a mgnet.me shortened URL
+    // precondition: mgnet.me/... or http://mgnet.me/
+    public static String getMagnetLinkFromMgnetMeUrl(String url) throws Exception {
+        if(url.startsWith("mgnet.me")) url = "http://"+url;
+        if(!url.startsWith("http://")) throw new MalformedURLException("Malformed URL in mgnet.me parser");
+        URLConnection conn = new URL(url).openConnection();
+        conn.connect();
+        return conn.getHeaderField("Magnet-Uri");
     }
 }
